@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medisync360/screens/Login/login_page.dart';
 import 'theme/app_theme.dart';
 import 'screens/home_screen.dart';
 
@@ -47,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
       );
     });
   }
