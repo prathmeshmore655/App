@@ -21,4 +21,13 @@ class LoginPasswordChanged extends LoginEvent {
   List<Object?> get props => [password];
 }
 
+
+class LoginUserTypeChanged extends LoginEvent {
+  final String userType;
+  LoginUserTypeChanged(this.userType);
+
+  @override
+  List<Object?> get props => [userType];
+}
+
 class LoginSubmitted extends LoginEvent {}

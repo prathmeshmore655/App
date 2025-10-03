@@ -1,51 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medisync360/Repositiories/auth_repository.dart';
+import 'package:medisync360/screens/Hospital Screens/hospital_home_page.dart';
 import 'package:medisync360/screens/Login/login_bloc.dart';
 import 'package:medisync360/screens/Login/login_event.dart';
 import 'package:medisync360/screens/Login/login_state.dart';
 import 'package:medisync360/screens/SignUp/signup_page.dart';
-import 'package:medisync360/screens/home_screen.dart';
+import 'package:medisync360/screens/User%20Screens/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoginBloc(authRepository: AuthRepository()),
-      child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFE3F2FD),
-                    Color(0xFFBBDEFB),
-                    Color(0xFF90CAF9),
-                  ],
-                ),
-              ),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final bool isMobile = constraints.maxWidth < 800;
-                  return Center(
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: isMobile ? 500 : 1200,
-                      ),
-                      margin: EdgeInsets.all(
-                        isMobile ? 16 : 24,
-                      ),
-                      child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
-                    ),
-                  );
-                },
-              ),
-            ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FBFF),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: BlocProvider(
+          create: (context) => LoginBloc(authRepository: AuthRepository()),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 900) {
+                return _buildMobileLayout(context);
+              } else {
+                return _buildDesktopLayout(context);
+              }
+            },
           ),
         ),
       ),
@@ -53,13 +34,19 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildMobileLayout(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _buildLeftContent(isMobile: true),
-        const SizedBox(height: 32),
-        _buildLoginForm(context, isMobile: true),
-      ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            _buildLeftContent(isMobile: true),
+            const SizedBox(height: 40),
+            _buildLoginForm(context, isMobile: true),
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
     );
   }
 
@@ -143,7 +130,6 @@ class LoginScreen extends StatelessWidget {
           const SizedBox(height: 24),
           // Features List
           _buildFeatureItem(Icons.health_and_safety, "Health Monitoring", isMobile),
-          // _buildFeatureItem(Icons.medication, "Medication Management", isMobile),
           _buildFeatureItem(Icons.calendar_today, "Appointment Scheduling", isMobile),
           _buildFeatureItem(Icons.analytics, "Health Analytics", isMobile),
           const SizedBox(height: 32),
@@ -215,12 +201,30 @@ class LoginScreen extends StatelessWidget {
               backgroundColor: Colors.green,
             ),
           );
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
+          // Role-based navigation
+          if (state.userType == 'User') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+            );
+          } else if (state.userType == 'Hospital') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HospitalHomePage(),
+              ),
+            );
+          } else if (state.userType == 'Doctor') {
+            // TODO: Replace with actual Doctor screen when available
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Doctor screen not implemented yet."),
+                backgroundColor: Colors.orange,
+              ),
+            );
+          }
         } else if (state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -271,37 +275,66 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 32),
-
+              // User Type Dropdown
+              _buildUserTypeDropdown(state, context),
+              const SizedBox(height: 20),
               // Email Field
               _buildEmailField(state, context),
               const SizedBox(height: 20),
-              
               // Password Field
               _buildPasswordField(state, context),
               const SizedBox(height: 24),
-
-              // Remember Me & Forgot Password
-              // _buildRememberForgotSection(context, isMobile),
-              // const SizedBox(height: 24),
-
               // Login Button
               _buildLoginButton(state, context),
-              
-              // Divider
-              // const SizedBox(height: 32),
-              // _buildDivider(),
-              // const SizedBox(height: 24),
-
-              // Social Login Buttons
-              // _buildSocialLoginButtons(isMobile),
-
               // Create Account
-              // const SizedBox(height: 32),
               _buildSignUpSection(context),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildUserTypeDropdown(LoginState state, BuildContext context) {
+    final userTypes = ['User', 'Doctor', 'Hospital'];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "User Type",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.blueGrey,
+          ),
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          value: state.userType,
+          items: userTypes
+              .map((type) => DropdownMenuItem(
+                    value: type,
+                    child: Text(type),
+                  ))
+              .toList(),
+          onChanged: (value) {
+            if (value != null) {
+              context.read<LoginBloc>().add(LoginUserTypeChanged(value));
+            }
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.grey),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.blue),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          ),
+        ),
+      ],
     );
   }
 
@@ -339,7 +372,6 @@ class LoginScreen extends StatelessWidget {
             ),
             prefixIcon: const Icon(Icons.email, color: Colors.grey),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            // errorText: state.email.isEmpty ? null : state.emailError,
             errorText: null,
           ),
           onChanged: (value) {
@@ -353,10 +385,10 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildPasswordField(LoginState state, BuildContext context) {
-    bool isPasswordVisible = false;
-    
     return StatefulBuilder(
       builder: (context, setState) {
+        bool isPasswordVisible = false;
+        
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -402,7 +434,6 @@ class LoginScreen extends StatelessWidget {
                   },
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                // errorText: state.password.isEmpty ? null : state.passwordError,
                 errorText: null,
               ),
               onChanged: (value) {
@@ -420,48 +451,6 @@ class LoginScreen extends StatelessWidget {
       },
     );
   }
-
-  // Widget _buildRememberForgotSection(BuildContext context, bool isMobile) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Row(
-  //         children: [
-  //           Container(
-  //             width: 20,
-  //             height: 20,
-  //             decoration: BoxDecoration(
-  //               border: Border.all(color: Colors.grey),
-  //               borderRadius: BorderRadius.circular(4),
-  //             ),
-  //             child: const Icon(Icons.check, size: 16, color: Colors.blue),
-  //           ),
-  //           const SizedBox(width: 8),
-  //           Text(
-  //             "Remember me",
-  //             style: TextStyle(
-  //               fontSize: isMobile ? 13 : 14,
-  //               color: Colors.grey,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       TextButton(
-  //           onPressed: () {
-  //             _showForgotPasswordDialog(context);
-  //           },
-  //         child: Text(
-  //           "Forgot Password?",
-  //           style: TextStyle(
-  //             color: Colors.blue,
-  //             fontWeight: FontWeight.w500,
-  //             fontSize: isMobile ? 13 : 14,
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildLoginButton(LoginState state, BuildContext context) {
     return SizedBox(
@@ -501,85 +490,14 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-
-
-  // Widget _buildDivider() {
-  //   return Row(
-  //     children: [
-  //       Expanded(
-  //         child: Divider(color: Colors.grey.withOpacity(0.3)),
-  //       ),
-  //       Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 16),
-  //         child: Text(
-  //           "or continue with",
-  //           style: TextStyle(
-  //             fontSize: 12,
-  //             color: Colors.grey.withOpacity(0.7),
-  //           ),
-  //         ),
-  //       ),
-  //       Expanded(
-  //         child: Divider(color: Colors.grey.withOpacity(0.3)),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-
-
-  // Widget _buildSocialLoginButtons(bool isMobile) {
-  //   return Row(
-  //     children: [
-  //       Expanded(
-  //         child: OutlinedButton.icon(
-  //           style: OutlinedButton.styleFrom(
-  //             foregroundColor: Colors.blueGrey,
-  //             side: BorderSide(color: Colors.grey.withOpacity(0.3)),
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(12),
-  //             ),
-  //             padding: const EdgeInsets.symmetric(vertical: 12),
-  //           ),
-  //           onPressed: () {
-  //             _handleSocialLogin('google');
-  //           },
-  //           icon: const Icon(Icons.g_mobiledata, size: 24),
-  //           label: const Text("Google"),
-  //         ),
-  //       ),
-  //       SizedBox(width: isMobile ? 12 : 16),
-  //       Expanded(
-  //         child: OutlinedButton.icon(
-  //           style: OutlinedButton.styleFrom(
-  //             foregroundColor: Colors.blueGrey,
-  //             side: BorderSide(color: Colors.grey.withOpacity(0.3)),
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(12),
-  //             ),
-  //             padding: const EdgeInsets.symmetric(vertical: 12),
-  //           ),
-  //           onPressed: () {
-  //             _handleSocialLogin('apple');
-  //           },
-  //           icon: const Icon(Icons.apple, size: 24),
-  //           label: const Text("Apple"),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-
   Widget _buildSignUpSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
         child: TextButton(
-              onPressed: () {
-                
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
-              },
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupScreen()));
+          },
           child: RichText(
             text: const TextSpan(
               text: "Don't have an account? ",
@@ -646,6 +564,4 @@ class LoginScreen extends StatelessWidget {
     // Implement social login functionality
     print('Social login with $provider');
   }
-
-
 }

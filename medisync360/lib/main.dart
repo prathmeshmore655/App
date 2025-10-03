@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medisync360/screens/Login/login_page.dart';
 import 'theme/app_theme.dart';
-import 'screens/home_screen.dart';
 
 void main() {
   runApp(const MediSyncApp());
