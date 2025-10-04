@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medisync360/Repositiories/auth_repository.dart';
-import 'package:medisync360/screens/Hospital Screens/hospital_home_page.dart';
+import 'package:medisync360/screens/Hospital%20Screens/hospital_dashboard_page.dart';
 import 'package:medisync360/screens/Login/login_bloc.dart';
 import 'package:medisync360/screens/Login/login_event.dart';
 import 'package:medisync360/screens/Login/login_state.dart';
@@ -192,106 +192,108 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildLoginForm(BuildContext context, {required bool isMobile}) {
-    return BlocConsumer<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state.isSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Login Successful ✅"),
-              backgroundColor: Colors.green,
-            ),
-          );
-          // Role-based navigation
-          if (state.userType == 'User') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
-              ),
-            );
-          } else if (state.userType == 'Hospital') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HospitalHomePage(),
-              ),
-            );
-          } else if (state.userType == 'Doctor') {
-            // TODO: Replace with actual Doctor screen when available
+    return SingleChildScrollView(
+      child: BlocConsumer<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state.isSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text("Doctor screen not implemented yet."),
-                backgroundColor: Colors.orange,
+                content: Text("Login Successful ✅"),
+                backgroundColor: Colors.green,
+              ),
+            );
+            // Role-based navigation
+            if (state.userType == 'User') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ),
+              );
+            } else if (state.userType == 'Hospital') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HospitalDashboardPage(),
+                ),
+              );
+            } else if (state.userType == 'Doctor') {
+              // TODO: Replace with actual Doctor screen when available
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Doctor screen not implemented yet."),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            }
+          } else if (state.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage!),
+                backgroundColor: Colors.red,
               ),
             );
           }
-        } else if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage!),
-              backgroundColor: Colors.red,
+        },
+        builder: (context, state) {
+          return Container(
+            padding: EdgeInsets.all(isMobile ? 24 : 40),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 30,
+                  offset: const Offset(0, 15),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Form Header
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Welcome Back",
+                      style: TextStyle(
+                        fontSize: isMobile ? 24 : 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Sign in to continue your health journey",
+                      style: TextStyle(
+                        fontSize: isMobile ? 13 : 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                // User Type Dropdown
+                _buildUserTypeDropdown(state, context),
+                const SizedBox(height: 20),
+                // Email Field
+                _buildEmailField(state, context),
+                const SizedBox(height: 20),
+                // Password Field
+                _buildPasswordField(state, context),
+                const SizedBox(height: 24),
+                // Login Button
+                _buildLoginButton(state, context),
+                // Create Account
+                _buildSignUpSection(context),
+              ],
             ),
           );
-        }
-      },
-      builder: (context, state) {
-        return Container(
-          padding: EdgeInsets.all(isMobile ? 24 : 40),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.15),
-                blurRadius: 30,
-                offset: const Offset(0, 15),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Form Header
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Welcome Back",
-                    style: TextStyle(
-                      fontSize: isMobile ? 24 : 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Sign in to continue your health journey",
-                    style: TextStyle(
-                      fontSize: isMobile ? 13 : 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-              // User Type Dropdown
-              _buildUserTypeDropdown(state, context),
-              const SizedBox(height: 20),
-              // Email Field
-              _buildEmailField(state, context),
-              const SizedBox(height: 20),
-              // Password Field
-              _buildPasswordField(state, context),
-              const SizedBox(height: 24),
-              // Login Button
-              _buildLoginButton(state, context),
-              // Create Account
-              _buildSignUpSection(context),
-            ],
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 
