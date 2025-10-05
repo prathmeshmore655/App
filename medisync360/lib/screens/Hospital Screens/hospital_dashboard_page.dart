@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Analytics/analytics.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Bed%20Management/bed_management.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Bed%20Management/bed_management_bloc.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_bloc.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_event.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_state.dart';
@@ -844,90 +848,15 @@ void _showProfileMenu() {
 
   // Placeholder tabs with enhanced UI
   Widget _buildBedManagementTab(HospitalDashboardState state, BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.bed_outlined,
-            size: 64,
-            color: Colors.grey.shade400,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "Bed Management",
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            "Advanced bed allocation and management",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
-      ),
-    );
+    return BedComponent();
   }
 
   Widget _buildPatientsTab(HospitalDashboardState state, BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.people_outline,
-            size: 64,
-            color: Colors.grey.shade400,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "Patient Management",
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            "Comprehensive patient care system",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
-      ),
-    );
+    return PatientComponent();
   }
 
   Widget _buildAnalyticsTab(HospitalDashboardState state, BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.analytics_outlined,
-            size: 64,
-            color: Colors.grey.shade400,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "Hospital Analytics",
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            "Data-driven insights and reports",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
-      ),
-    );
+    return AnalyticsComponent();
   }
 }
 
