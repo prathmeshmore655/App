@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:medisync360/screens/Login/login_page.dart';
 import 'package:medisync360/screens/User%20Screens/book_appointment.dart';
 import 'package:medisync360/screens/User%20Screens/chatbot_screen.dart';
@@ -6,7 +7,7 @@ import 'package:medisync360/screens/User%20Screens/ml_analyzers.dart';
 import 'package:medisync360/screens/User%20Screens/my_vault.dart';
 import 'package:medisync360/screens/User%20Screens/sos_screen.dart';
 import 'package:medisync360/widgets/mapwidget.dart';
-import "my_profile.dart";
+import "Profile/profile_page.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +17,66 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _ensureLocationPermission();
+    });
+  }
+
+  Future<void> _ensureLocationPermission() async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Please enable location services to show your location on the map.'),
+        ));
+      }
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Location permission denied. Map will show default location.'),
+        ));
+      }
+      return;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Location permission'),
+            content: const Text(
+                'Location permissions are permanently denied. Please enable them from app settings.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Geolocator.openAppSettings();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Open Settings'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>  MyProfile(),
+                        builder: (context) =>  ProfileScreen(),
                       ),
                     );
                   },

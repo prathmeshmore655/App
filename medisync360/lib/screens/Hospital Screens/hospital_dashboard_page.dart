@@ -10,6 +10,7 @@ import 'package:medisync360/screens/Hospital%20Screens/hospital_bloc.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_event.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_state.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medisync360/screens/Login/login_page.dart';
 
 class HospitalDashboardPage extends StatelessWidget {
   const HospitalDashboardPage({super.key});
@@ -36,13 +37,72 @@ class HospitalDashboardPage extends StatelessWidget {
                       ],
                     ),
             ),
+
+
+
+
+            
           );
+
+
+
+          
         },
       ),
     );
+
+
+
+
+
+    
   }
 
 AppBar _buildAppBar(HospitalDashboardState state, BuildContext context) {
+
+
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Log Out",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text("Are you sure you want to log out?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()),
+                (route) => false,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Logged Out Successfully"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              child: const Text(
+                "Log Out",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   return AppBar(
     backgroundColor: Theme.of(context).primaryColor,
     elevation: 2,
@@ -141,6 +201,40 @@ AppBar _buildAppBar(HospitalDashboardState state, BuildContext context) {
       
       // Refresh Button with Rotation Animation
       _buildRefreshButton(context),
+
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        _showLogoutDialog();
+                      },
+                      borderRadius: BorderRadius.circular(20),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout, size: 18, color: Colors.white),
+                            SizedBox(width: 6),
+                            Text(
+                              "Log Out",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                  
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
       
       // Profile/More Options
       _buildProfileMenu(context),
@@ -470,7 +564,7 @@ void _showProfileMenu() {
 
   Widget _buildTabBar(BuildContext context, HospitalDashboardBloc bloc,
       HospitalDashboardState state) {
-    final tabs = ["Overview", "Bed Management", "Patients", "Analytics"];
+    final tabs = ["Overview", "Bed Management", "Patients", "Analytics" ];
     
     return Container(
       decoration: BoxDecoration(
@@ -652,71 +746,117 @@ void _showProfileMenu() {
     );
   }
 
-  Widget _buildHospitalInfoCard(HospitalDashboardState state, BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.local_hospital,
-                color: Theme.of(context).primaryColor,
-                size: 32,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    state.hospitalName,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF212121),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildInfoRow(Icons.location_on, "Location: ${state.location}"),
-                  _buildInfoRow(Icons.fingerprint, "Reg ID: ${state.regId}"),
-                  _buildInfoRow(Icons.calendar_today, "Established: ${state.established}"),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+Widget _buildHospitalInfoCard(HospitalDashboardState state, BuildContext context) {
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      bool isMobile = constraints.maxWidth < 600; // breakpoint for small screens
 
-  Widget _buildInfoRow(IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        children: [
-          Icon(icon, size: 16, color: Colors.grey.shade600),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontSize: 14,
-              ),
+      return Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: isMobile
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        _buildHospitalIcon(context),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            state.hospitalName,
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF212121),
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInfoRow(Icons.location_on, "Location: ${state.location}", isMobile),
+                    _buildInfoRow(Icons.fingerprint, "Reg ID: ${state.regId}", isMobile),
+                    _buildInfoRow(Icons.calendar_today, "Established: ${state.established}", isMobile),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHospitalIcon(context),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state.hospitalName,
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF212121),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 8),
+                          _buildInfoRow(Icons.location_on, "Location: ${state.location}"),
+                          _buildInfoRow(Icons.fingerprint, "Reg ID: ${state.regId}"),
+                          _buildInfoRow(Icons.calendar_today, "Established: ${state.established}"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildHospitalIcon(BuildContext context) {
+  return Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Theme.of(context).primaryColor.withOpacity(0.1),
+      shape: BoxShape.circle,
+    ),
+    child: Icon(
+      Icons.local_hospital,
+      color: Theme.of(context).primaryColor,
+      size: 32,
+    ),
+  );
+}
+
+Widget _buildInfoRow(IconData icon, String text, [bool isMobile = false]) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 4),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 18, color: Colors.grey[700]),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: isMobile ? 14 : 16,
+              color: Colors.grey[800],
             ),
+            softWrap: true,
+            overflow: TextOverflow.visible,
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
+
+
 
   Widget _buildStatsGrid(HospitalDashboardState state, BuildContext context) {
     final stats = [
@@ -848,7 +988,7 @@ void _showProfileMenu() {
 
   // Placeholder tabs with enhanced UI
   Widget _buildBedManagementTab(HospitalDashboardState state, BuildContext context) {
-    return BedComponent();
+    return Center(child: BedComponent());
   }
 
   Widget _buildPatientsTab(HospitalDashboardState state, BuildContext context) {
@@ -869,3 +1009,6 @@ class _StatItem {
 
   _StatItem(this.title, this.value, this.icon, this.color, this.backgroundColor);
 }
+
+
+  
