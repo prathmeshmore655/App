@@ -279,7 +279,7 @@ class LoginScreen extends StatelessWidget {
                 // User Type Dropdown
                 _buildUserTypeDropdown(state, context),
                 const SizedBox(height: 20),
-                // Email Field
+                // Username Field
                 _buildEmailField(state, context),
                 const SizedBox(height: 20),
                 // Password Field
@@ -345,7 +345,7 @@ class LoginScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Email Address",
+          "Username",
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -355,7 +355,7 @@ class LoginScreen extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           decoration: InputDecoration(
-            hintText: "Enter your email",
+            hintText: "Enter your Username :",
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Colors.grey),
@@ -372,14 +372,14 @@ class LoginScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Colors.red),
             ),
-            prefixIcon: const Icon(Icons.email, color: Colors.grey),
+            prefixIcon: const Icon(Icons.people, color: Colors.grey),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             errorText: null,
           ),
           onChanged: (value) {
+            print("Changing");
             context.read<LoginBloc>().add(LoginEmailChanged(value));
           },
-          keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
         ),
       ],

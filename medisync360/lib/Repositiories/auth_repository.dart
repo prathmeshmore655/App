@@ -2,15 +2,28 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthRepository {
-  final String baseUrl = "http://localhost:8000/auth"; // Change for production
+  final String baseUrl = "https://bc24f240bd59.ngrok-free.app"; // Change for production
 
   /// 🔹 Mock Login (for testing UI)
-  Future<bool> login(String email, String password) async {
-    await Future.delayed(const Duration(seconds: 2)); // simulate API delay
-    if (email == "admin@gmail.com" && password == "123456") {
+  Future<bool> login(String username ,  String password , String user_type ) async {
+
+    final response = await http.post(Uri.parse('$baseUrl/auth/token/') , 
+
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    
+    body: jsonEncode({
+      'username' : username,
+      'password' : password,
+      'user_type' : user_type.toLowerCase()
+    })); 
+
+    if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception("Invalid credentials");
+      final errorBody = jsonDecode(response.body);
+      throw Exception("Invalid credentials: ${errorBody['detail'] ?? response.statusCode}");
     }
   }
 

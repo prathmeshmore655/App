@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:medisync360/Repositiories/profile_repository.dart';
 import 'package:medisync360/screens/Login/login_page.dart';
-import 'package:medisync360/screens/User%20Screens/book_appointment.dart';
+import 'package:medisync360/screens/User%20Screens/Appointment/my_appointments.dart';
+import 'package:medisync360/screens/User%20Screens/Profile/profile_bloc.dart';
+import 'package:medisync360/screens/User%20Screens/Appointment/appointment.dart';
 import 'package:medisync360/screens/User%20Screens/chatbot_screen.dart';
 import 'package:medisync360/screens/User%20Screens/ml_analyzers.dart';
 import 'package:medisync360/screens/User%20Screens/my_vault.dart';
@@ -134,7 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>  ProfileScreen(),
+                        builder: (context) => BlocProvider(
+                          create: (_) => ProfileBloc(ProfileRepository()),
+                          child: const ProfileScreen(),
+                        ),
                       ),
                     );
                   },
@@ -164,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
           )
@@ -243,7 +250,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildDrawerItem(
                       icon: Icons.schedule,
                       title: 'Book Appointment',
-                      onTap: () => _navigateTo(context, const BookAppointment()),
+                      onTap: () => _navigateTo(context,  BookAppointmentScreen()),
+                    ),
+                    _buildDrawerItem(
+                      icon: Icons.medical_information,
+                      title: 'My Appointments',
+                      onTap: () => _navigateTo(context, MyAppointmentsScreen()),
                     ),
                     _buildDrawerItem(
                       icon: Icons.security,

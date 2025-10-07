@@ -8,14 +8,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc({required this.authRepository}) : super(const LoginState()) {
     on<LoginEmailChanged>((event, emit) {
-      final email = event.email;
-      final isValid = email.contains('@') && state.password.length >= 6;
-      emit(state.copyWith(email: email, isValid: isValid));
+      final username = event.username;
+      final isUsernameValid = username.isNotEmpty;
+      final isPasswordValid = state.password.isNotEmpty;
+      final isValid = isUsernameValid && isPasswordValid;
+      emit(state.copyWith(username: username, isValid: isValid));
     });
 
     on<LoginPasswordChanged>((event, emit) {
       final password = event.password;
-      final isValid = state.email.contains('@') && password.length >= 6;
+      final isPasswordValid = password.isNotEmpty;
+      final isUsernameValid = state.username.isNotEmpty;
+      final isValid = isUsernameValid && isPasswordValid;
+
+      print(isValid);
       emit(state.copyWith(password: password, isValid: isValid));
     });
 
@@ -26,7 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginSubmitted>((event, emit) async {
       emit(state.copyWith(isSubmitting: true, errorMessage: null));
       try {
-        await authRepository.login(state.email, state.password);
+        await authRepository.login(state.username , state.password , state.userType);
         emit(state.copyWith(isSubmitting: false, isSuccess: true));
       } catch (e) {
         emit(state.copyWith(

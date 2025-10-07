@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 
 class LoginState extends Equatable {
-  final String email;
+  final String username;
   final String password;
   final String userType; // 'User', 'Doctor', 'Hospital'
   final bool isValid;
@@ -10,8 +10,9 @@ class LoginState extends Equatable {
   final bool isSuccess;
   final String? errorMessage;
 
+
   const LoginState({
-    this.email = '',
+    this.username = '',
     this.password = '',
     this.userType = 'User',
     this.isValid = false,
@@ -21,7 +22,7 @@ class LoginState extends Equatable {
   });
 
   LoginState copyWith({
-    String? email,
+    String? username ,
     String? password,
     String? userType,
     bool? isValid,
@@ -30,16 +31,16 @@ class LoginState extends Equatable {
     String? errorMessage,
   }) {
     return LoginState(
-      email: email ?? this.email,
+      username: username ?? this.username,
       password: password ?? this.password,
       userType: userType ?? this.userType,
       isValid: isValid ?? this.isValid,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
-      errorMessage: errorMessage,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [email, password, userType, isValid, isSubmitting, isSuccess, errorMessage];
+  List<Object?> get props => [username, password, userType, isValid, isSubmitting, isSuccess, errorMessage];
 }
