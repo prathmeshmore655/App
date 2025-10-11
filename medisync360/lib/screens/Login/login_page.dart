@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medisync360/Repositiories/auth_repository.dart';
+import 'package:medisync360/Repositiories/hospital_repository.dart';
+import 'package:medisync360/screens/Hospital%20Screens/hospital_bloc.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_dashboard_page.dart';
+import 'package:medisync360/screens/Hospital%20Screens/hospital_event.dart';
 import 'package:medisync360/screens/Login/login_bloc.dart';
 import 'package:medisync360/screens/Login/login_event.dart';
 import 'package:medisync360/screens/Login/login_state.dart';
@@ -214,7 +217,10 @@ class LoginScreen extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const HospitalDashboardPage(),
+                  builder: (context) => BlocProvider(
+                    create: (context) => HospitalBloc(repository: HospitalRepository())..add(FetchHospitalEvent()),
+                    child: const HospitalDashboardScreen(),
+                  ),
                 ),
               );
             } else if (state.userType == 'Doctor') {
@@ -355,7 +361,7 @@ class LoginScreen extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           decoration: InputDecoration(
-            hintText: "Enter your Username :",
+            hintText: "Enter your Username ",
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Colors.grey),

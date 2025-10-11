@@ -1,31 +1,42 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:medisync360/base_url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  final String baseUrl = "https://bc24f240bd59.ngrok-free.app"; // Change for production
+  final String baseUrl = BASE_URL; // Change for production
 
   /// 🔹 Mock Login (for testing UI)
-  Future<bool> login(String username ,  String password , String user_type ) async {
-
-    final response = await http.post(Uri.parse('$baseUrl/auth/token/') , 
-
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    
+Future<bool> login(String username, String password, String userType) async {
+  final response = await http.post(
+    Uri.parse('$baseUrl/auth/token/'),
+    headers: {'Content-Type': 'application/json'},
     body: jsonEncode({
-      'username' : username,
-      'password' : password,
-      'user_type' : user_type.toLowerCase()
-    })); 
+      'username': username,
+      'password': password,
+      'user_type': userType.toLowerCase(),
+    }),
+  );
 
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      final errorBody = jsonDecode(response.body);
-      throw Exception("Invalid credentials: ${errorBody['detail'] ?? response.statusCode}");
-    }
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+
+    // ✅ Store tokens and user info locally
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('access', data['access']);
+    await prefs.setString('refresh', data['refresh']);
+    await prefs.setString('user_type', data['user_type']);
+    await prefs.setString('email', data['email']);
+    await prefs.setString('username', data['username']);
+
+    print('✅ Login successful, tokens saved locally.');
+    return true;
+  } else {
+    final errorBody = jsonDecode(response.body);
+    throw Exception("Invalid credentials: ${errorBody['detail'] ?? response.statusCode}");
   }
+}
+
 
   /// 🔹 Mock Signup (for testing UI)
   Future<bool> mockSignup({

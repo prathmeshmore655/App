@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:medisync360/Repositiories/profile_repository.dart';
+import 'package:medisync360/Repositiories/user_repository.dart';
 import 'package:medisync360/screens/Login/login_page.dart';
 import 'package:medisync360/screens/User%20Screens/Appointment/my_appointments.dart';
+import 'package:medisync360/screens/User%20Screens/Chatbot/chatbot_bloc.dart';
+import 'package:medisync360/screens/User%20Screens/Chatbot/chatbot_screen.dart';
 import 'package:medisync360/screens/User%20Screens/Profile/profile_bloc.dart';
 import 'package:medisync360/screens/User%20Screens/Appointment/appointment.dart';
-import 'package:medisync360/screens/User%20Screens/chatbot_screen.dart';
 import 'package:medisync360/screens/User%20Screens/ml_analyzers.dart';
 import 'package:medisync360/screens/User%20Screens/my_vault.dart';
 import 'package:medisync360/screens/User%20Screens/sos_screen.dart';
@@ -139,8 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => BlocProvider(
-                          create: (_) => ProfileBloc(ProfileRepository()),
-                          child: const ProfileScreen(),
+                          create: (_) => UserBloc(ProfileRepository as UserRepository),
+                          child: const UserProfileScreen(),
                         ),
                       ),
                     );
@@ -240,7 +242,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildDrawerItem(
                       icon: Icons.chat,
                       title: 'Chatbot',
-                      onTap: () => _navigateTo(context, const ChatbotScreen()),
+                      onTap: () => Navigator.push(context,  MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value: context.read<ChatbotBloc>(),
+                                child: const ChatbotScreen(),
+                              ),
+                    ),
+                      ),
                     ),
                     _buildDrawerItem(
                       icon: Icons.psychology,

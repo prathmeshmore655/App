@@ -1,10 +1,34 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medisync360/Repositiories/chatbot_repository.dart';
 import 'package:medisync360/screens/Login/login_page.dart';
+import 'package:medisync360/screens/User%20Screens/Chatbot/chatbot_bloc.dart';
+import 'package:medisync360/screens/User%20Screens/Chatbot/chatbot_screen.dart';
 import 'theme/app_theme.dart';
 
+
 void main() {
-  runApp(const MediSyncApp());
+  runApp(
+    // Provide repository & bloc globally
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<ChatbotRepository>(
+          create: (_) => ChatbotRepository(),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<ChatbotBloc>(
+            create: (context) =>
+                ChatbotBloc(context.read<ChatbotRepository>()),
+          ),
+        ],
+        child: const MediSyncApp(),
+      ),
+    ),
+  );
 }
 
 class MediSyncApp extends StatelessWidget {
@@ -16,10 +40,12 @@ class MediSyncApp extends StatelessWidget {
       title: 'MediSync 360',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      // You can change this to any initial screen you want
       home: const EnterpriseSplashScreen(),
     );
   }
 }
+
 
 /// Enterprise-level Splash Screen with Advanced Animations
 class EnterpriseSplashScreen extends StatefulWidget {

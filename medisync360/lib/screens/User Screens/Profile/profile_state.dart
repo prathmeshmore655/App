@@ -1,22 +1,29 @@
-import 'package:medisync360/models/profile_model.dart';
+import 'package:equatable/equatable.dart';
+import 'package:medisync360/models/user_model.dart';
 
-
-abstract class ProfileState {}
-
-class ProfileInitial extends ProfileState {}
-
-class ProfileLoading extends ProfileState {}
-
-class ProfileLoaded extends ProfileState {
-  final UserProfile profile;
-  ProfileLoaded(this.profile);
+abstract class UserState extends Equatable {
+  @override
+  List<Object?> get props => [];
 }
 
-class ProfileUpdating extends ProfileState {}
+class UserInitial extends UserState {}
 
-class ProfileUpdated extends ProfileState {}
+class UserLoading extends UserState {}
 
-class ProfileError extends ProfileState {
+class UserLoaded extends UserState {
+  final UserModel user;
+
+  UserLoaded(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
+
+class UserError extends UserState {
   final String message;
-  ProfileError(this.message);
+
+  UserError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

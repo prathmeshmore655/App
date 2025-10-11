@@ -1,35 +1,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:medisync360/Repositiories/profile_repository.dart';
-import 'profile_event.dart';
-import 'profile_state.dart';
+import 'package:medisync360/Repositiories/user_repository.dart';
+import 'package:medisync360/screens/User%20Screens/Profile/profile_event.dart';
+import 'package:medisync360/screens/User%20Screens/Profile/profile_state.dart';
 
-class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final ProfileRepository repository;
 
-  ProfileBloc(this.repository) : super(ProfileInitial()) {
-    on<LoadUserProfile>(_onLoadProfile);
-    on<UpdateUserProfile>(_onUpdateProfile);
+class UserBloc extends Bloc<UserEvent, UserState> {
+  final UserRepository userRepository;
+
+  UserBloc(this.userRepository) : super(UserInitial()) {
+    on<FetchUserProfile>(_onFetchUserProfile);
   }
 
-  Future<void> _onLoadProfile(
-      LoadUserProfile event, Emitter<ProfileState> emit) async {
-    emit(ProfileLoading());
+  Future<void> _onFetchUserProfile(
+      FetchUserProfile event, Emitter<UserState> emit) async {
+    emit(UserLoading());
     try {
-      final profile = await repository.getUserProfile(event.token);
-      emit(ProfileLoaded(profile));
+      final user = await userRepository.fetchUserProfile();
+      emit(UserLoaded(user));
     } catch (e) {
-      emit(ProfileError(e.toString()));
-    }
-  }
-
-  Future<void> _onUpdateProfile(
-      UpdateUserProfile event, Emitter<ProfileState> emit) async {
-    emit(ProfileUpdating());
-    try {
-      await repository.updateUserProfile(event.token, event.updatedData);
-      emit(ProfileUpdated());
-    } catch (e) {
-      emit(ProfileError(e.toString()));
+      emit(UserError(e.toString()));
     }
   }
 }

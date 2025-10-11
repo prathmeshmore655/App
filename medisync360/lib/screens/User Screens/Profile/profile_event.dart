@@ -1,12 +1,8 @@
-abstract class ProfileEvent {}
+import 'package:equatable/equatable.dart';
 
-class LoadUserProfile extends ProfileEvent {
-  final String token;
-  LoadUserProfile(this.token);
+abstract class UserEvent extends Equatable {
+  @override
+  List<Object?> get props => [];
 }
 
-class UpdateUserProfile extends ProfileEvent {
-  final String token;
-  final Map<String, dynamic> updatedData;
-  UpdateUserProfile(this.token, this.updatedData);
-}
+class FetchUserProfile extends UserEvent {}

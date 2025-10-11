@@ -1,35 +1,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:medisync360/screens/Hospital%20Screens/hospital_event.dart';
-import 'package:medisync360/screens/Hospital%20Screens/hospital_state.dart';
+import 'package:medisync360/Repositiories/hospital_repository.dart';
+import 'hospital_event.dart';
+import 'hospital_state.dart';
 
-class HospitalDashboardBloc
-    extends Bloc<HospitalDashboardEvent, HospitalDashboardState> {
-  HospitalDashboardBloc() : super(const HospitalDashboardState()) {
-    on<LoadHospitalData>(_onLoadHospitalData);
-    on<ChangeDashboardTab>(_onChangeDashboardTab);
+class HospitalBloc extends Bloc<HospitalEvent, HospitalState> {
+  final HospitalRepository repository;
+
+  HospitalBloc({required this.repository}) : super(HospitalInitial()) {
+    on<FetchHospitalEvent>(_onFetchHospital);
   }
 
-  Future<void> _onLoadHospitalData(
-      LoadHospitalData event, Emitter<HospitalDashboardState> emit) async {
-    emit(state.copyWith(isLoading: true));
-
-    await Future.delayed(const Duration(seconds: 1)); // simulate API
-
-    emit(state.copyWith(
-      isLoading: false,
-      hospitalName: "CityCare Hospital",
-      regId: "HSP-0923",
-      established: "2010",
-      location: "Pune, Maharashtra",
-      totalBeds: 120,
-      occupiedBeds: 85,
-      totalPatients: 3400,
-      doctorsCount: 56,
-    ));
-  }
-
-  void _onChangeDashboardTab(
-      ChangeDashboardTab event, Emitter<HospitalDashboardState> emit) {
-    emit(state.copyWith(selectedTabIndex: event.tabIndex));
+  Future<void> _onFetchHospital(
+      FetchHospitalEvent event, Emitter<HospitalState> emit) async {
+    emit(HospitalLoading());
+    try {
+      final hospital = await repository.fetchHospitalProfile();
+      final beds = await repository.fetchHospitalBeds();
+      emit(HospitalLoaded(hospital, beds));
+    } catch (e) {
+      emit(HospitalError("Error: $e"));
+    }
   }
 }
