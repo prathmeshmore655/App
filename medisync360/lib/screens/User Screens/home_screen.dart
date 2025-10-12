@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:medisync360/Repositiories/profile_repository.dart';
 import 'package:medisync360/Repositiories/user_repository.dart';
 import 'package:medisync360/screens/Login/login_page.dart';
 import 'package:medisync360/screens/User%20Screens/Appointment/my_appointments.dart';
@@ -141,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => BlocProvider(
-                          create: (_) => UserBloc(ProfileRepository as UserRepository),
+                          create: (_) => UserBloc(UserRepository as UserRepository),
                           child: const UserProfileScreen(),
                         ),
                       ),

@@ -1,53 +1,23 @@
 import 'package:equatable/equatable.dart';
+import 'package:medisync360/models/patients_model.dart';
 
-class Patient extends Equatable {
-  final int id;
-  final String name;
-  final int age;
-  final String gender;
-  final String ward;
-  final String bed;
-  final String status; // Admitted / Discharged
-
-  const Patient({
-    required this.id,
-    required this.name,
-    required this.age,
-    required this.gender,
-    required this.ward,
-    required this.bed,
-    required this.status,
-  });
-
-  Patient copyWith({String? status}) {
-    return Patient(
-      id: id,
-      name: name,
-      age: age,
-      gender: gender,
-      ward: ward,
-      bed: bed,
-      status: status ?? this.status,
-    );
-  }
+abstract class PatientState extends Equatable {
+  const PatientState();
 
   @override
-  List<Object?> get props => [id, name, age, gender, ward, bed, status];
+  List<Object?> get props => [];
 }
 
-class PatientState extends Equatable {
-  final bool isLoading;
-  final List<Patient> patients;
+class PatientInitial extends PatientState {}
 
-  const PatientState({this.isLoading = true, this.patients = const []});
+class PatientLoading extends PatientState {}
 
-  PatientState copyWith({bool? isLoading, List<Patient>? patients}) {
-    return PatientState(
-      isLoading: isLoading ?? this.isLoading,
-      patients: patients ?? this.patients,
-    );
-  }
+class PatientLoaded extends PatientState {
+  final List<PatientModel> patients;
+  const PatientLoaded(this.patients);
+}
 
-  @override
-  List<Object?> get props => [isLoading, patients];
+class PatientError extends PatientState {
+  final String message;
+  const PatientError(this.message);
 }

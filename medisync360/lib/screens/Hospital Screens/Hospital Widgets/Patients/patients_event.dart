@@ -1,38 +1,27 @@
 import 'package:equatable/equatable.dart';
+import 'package:medisync360/models/patients_model.dart';
+
 
 abstract class PatientEvent extends Equatable {
   const PatientEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadPatients extends PatientEvent {}
 
 class AddPatient extends PatientEvent {
-  final String name;
-  final int age;
-  final String gender;
-  final String ward;
-  final String bed;
-
-  const AddPatient({
-    required this.name,
-    required this.age,
-    required this.gender,
-    required this.ward,
-    required this.bed,
-  });
-
-  @override
-  List<Object> get props => [name, age, gender, ward, bed];
+  final PatientModel patient;
+  const AddPatient(this.patient);
 }
 
-class DischargePatient extends PatientEvent {
-  final int patientId;
+class UpdatePatient extends PatientEvent {
+  final PatientModel patient;
+  const UpdatePatient(this.patient);
+}
 
-  const DischargePatient(this.patientId);
-
-  @override
-  List<Object> get props => [patientId];
+class DeletePatient extends PatientEvent {
+  final int id;
+  const DeletePatient(this.id);
 }

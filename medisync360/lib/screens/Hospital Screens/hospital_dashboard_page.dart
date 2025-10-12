@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medisync360/Repositiories/patient_repositories.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Bed%20Management/bed_management.dart';
 import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Overview/hospital_overview_page.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients_bloc.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients_event.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_bloc.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_event.dart';
 import 'package:medisync360/screens/Hospital%20Screens/hospital_state.dart';
@@ -40,10 +45,13 @@ class _HospitalDashboardScreenState extends State<HospitalDashboardScreen> {
                 content = HospitalOverviewSection(hospital: hospital, beds: beds);
                 break;
               case 1:
-                content = _bedManagementSection(hospital);
+                content = BedManagementSection(hospital: hospital);
                 break;
               case 2:
-                content = const Center(child: Text("👨‍⚕️ Patients Section Coming Soon"));
+                content = BlocProvider(
+                create: (context) => PatientBloc(PatientRepository())..add(LoadPatients()),
+                child: const PatientListScreen(),
+                );
                 break;
               case 3:
                 content = const Center(child: Text("📊 Analytics Section Coming Soon"));
@@ -94,15 +102,5 @@ class _HospitalDashboardScreenState extends State<HospitalDashboardScreen> {
     );
   }
 
-  Widget _bedManagementSection(hospital) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Total Beds: ${hospital.totalBeds}"),
-        Text("Occupied Beds: ${hospital.occupiedBeds}"),
-        Text("ICU Beds: ${hospital.icuBeds}"),
-        Text("Ventilators: ${hospital.ventilators}"),
-      ],
-    );
-  }
+
 }
