@@ -3,9 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medisync360/Repositiories/chatbot_repository.dart';
+import 'package:medisync360/Repositiories/patient_repositories.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients_bloc.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients_event.dart';
 import 'package:medisync360/screens/Login/login_page.dart';
 import 'package:medisync360/screens/User%20Screens/Chatbot/chatbot_bloc.dart';
-import 'package:medisync360/screens/User%20Screens/Chatbot/chatbot_screen.dart';
 import 'theme/app_theme.dart';
 
 
@@ -17,6 +19,7 @@ void main() {
         RepositoryProvider<ChatbotRepository>(
           create: (_) => ChatbotRepository(),
         ),
+        
       ],
       child: MultiBlocProvider(
         providers: [
@@ -24,6 +27,13 @@ void main() {
             create: (context) =>
                 ChatbotBloc(context.read<ChatbotRepository>()),
           ),
+
+          BlocProvider<PatientBloc>(
+            create: (context) => PatientBloc(
+              PatientRepository(),
+            )..add(LoadPatients()),
+          ),
+
         ],
         child: const MediSyncApp(),
       ),

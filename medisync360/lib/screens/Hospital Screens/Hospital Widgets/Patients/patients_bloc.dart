@@ -5,13 +5,13 @@ import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patien
 
 
 class PatientBloc extends Bloc<PatientEvent, PatientState> {
-  final PatientRepository repository;
+  final PatientRepository patientRepository;
 
-  PatientBloc(this.repository) : super(PatientInitial()) {
+  PatientBloc(this.patientRepository) : super(PatientInitial()) {
     on<LoadPatients>((event, emit) async {
       emit(PatientLoading());
       try {
-        final patients = await repository.getPatients();
+        final patients = await patientRepository.getPatients();
         emit(PatientLoaded(patients));
       } catch (e) {
         emit(PatientError(e.toString()));
@@ -20,7 +20,7 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
 
     on<AddPatient>((event, emit) async {
       try {
-        await repository.addPatient(event.patient);
+        await patientRepository.addPatient(event.patient);
         add(LoadPatients());
       } catch (e) {
         emit(PatientError(e.toString()));
@@ -29,7 +29,7 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
 
     on<UpdatePatient>((event, emit) async {
       try {
-        await repository.updatePatient(event.patient);
+        await patientRepository.updatePatient(event.patient);
         add(LoadPatients());
       } catch (e) {
         emit(PatientError(e.toString()));
@@ -38,7 +38,7 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
 
     on<DeletePatient>((event, emit) async {
       try {
-        await repository.deletePatient(event.id);
+        await patientRepository.deletePatient(event.id);
         add(LoadPatients());
       } catch (e) {
         emit(PatientError(e.toString()));
