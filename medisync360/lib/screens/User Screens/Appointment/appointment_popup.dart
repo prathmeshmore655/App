@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:medisync360/models/doctor_models.dart';
+import 'package:medisync360/models/appointment_model.dart';
 import 'package:medisync360/screens/User%20Screens/Appointment/appointment_bloc.dart';
 import 'package:medisync360/screens/User%20Screens/Appointment/appointment_event.dart';
 import 'package:medisync360/screens/User%20Screens/Appointment/appointment_state.dart';

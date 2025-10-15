@@ -4,7 +4,7 @@ import 'package:medisync360/base_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = BASE_URL; // 🔹 Change to your API
+  static const String baseUrl = BASE_URL;
 
   // ---------------------------
   // ✅ Core API Request Handler
@@ -18,50 +18,77 @@ class ApiService {
     String? accessToken = prefs.getString('access');
     String? refreshToken = prefs.getString('refresh');
 
-    // Build headers with access token
+    // ---------------------------
+    // 🔹 Headers with no-cache
+    // ---------------------------
     Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
       if (accessToken != null) 'Authorization': 'Bearer $accessToken',
     };
 
+    // ---------------------------
+    // 🔹 Build full URL
+    // ---------------------------
     Uri url = Uri.parse('$baseUrl$endpoint');
+
+    // 🧠 Add timestamp param to GET requests to prevent caching
+    if (method.toUpperCase() == 'GET') {
+      url = url.replace(queryParameters: {
+        ...url.queryParameters,
+        't': DateTime.now().millisecondsSinceEpoch.toString(),
+      });
+    }
+
     http.Response response;
 
     // ---------------------------
-    // 🔹 Send API Request
+    // 🔹 Execute HTTP request
     // ---------------------------
-    if (method == 'POST') {
-      response = await http.post(url, headers: headers, body: jsonEncode(body));
-    } else if (method == 'PUT') {
-      response = await http.put(url, headers: headers, body: jsonEncode(body));
-    } else if (method == 'DELETE') {
-      response = await http.delete(url, headers: headers);
-    } else {
-      response = await http.get(url, headers: headers);
+    switch (method.toUpperCase()) {
+      case 'POST':
+        response = await http.post(url, headers: headers, body: jsonEncode(body));
+        break;
+      case 'PUT':
+        response = await http.put(url, headers: headers, body: jsonEncode(body));
+        break;
+      case 'DELETE':
+        response = await http.delete(url, headers: headers);
+        break;
+      default:
+        response = await http.get(url, headers: headers);
+        break;
     }
 
     // ---------------------------
-    // 🔹 Check Token Expiration
+    // 🔹 Handle 401 (Token Expired)
     // ---------------------------
     if (response.statusCode == 401 && refreshToken != null) {
       bool refreshed = await _refreshAccessToken(refreshToken);
 
       if (refreshed) {
-        // Retry original request once with new access token
         final newAccess = prefs.getString('access');
         headers['Authorization'] = 'Bearer $newAccess';
 
-        if (method == 'POST') {
-          response = await http.post(url, headers: headers, body: jsonEncode(body));
-        } else if (method == 'PUT') {
-          response = await http.put(url, headers: headers, body: jsonEncode(body));
-        } else if (method == 'DELETE') {
-          response = await http.delete(url, headers: headers);
-        } else {
-          response = await http.get(url, headers: headers);
+        // Retry once with refreshed token
+        switch (method.toUpperCase()) {
+          case 'POST':
+            response = await http.post(url, headers: headers, body: jsonEncode(body));
+            break;
+          case 'PUT':
+            response = await http.put(url, headers: headers, body: jsonEncode(body));
+            break;
+          case 'DELETE':
+            response = await http.delete(url, headers: headers);
+            break;
+          default:
+            response = await http.get(url, headers: headers);
+            break;
         }
       } else {
-        throw Exception("Session expired. Please login again.");
+        throw Exception("Session expired. Please log in again.");
       }
     }
 

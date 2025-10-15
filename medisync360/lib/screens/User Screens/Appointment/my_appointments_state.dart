@@ -1,6 +1,6 @@
 // bloc/my_appointments_state.dart
 import 'package:equatable/equatable.dart';
-import 'package:medisync360/models/appointment.dart';
+import 'package:medisync360/models/appointment_model.dart';
 
 abstract class MyAppointmentsState extends Equatable {
   @override

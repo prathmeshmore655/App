@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:medisync360/models/doctor_models.dart';
 import 'package:medisync360/models/patients_model.dart';
 
 
@@ -24,4 +25,11 @@ class UpdatePatient extends PatientEvent {
 class DeletePatient extends PatientEvent {
   final int id;
   const DeletePatient(this.id);
+}
+
+
+class LoadDoctores extends PatientEvent {
+
+  final DoctorModel doctorModel;
+  const LoadDoctores(this.doctorModel);
 }

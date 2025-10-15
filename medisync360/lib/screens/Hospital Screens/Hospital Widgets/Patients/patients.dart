@@ -26,9 +26,12 @@ class PatientListScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is PatientLoaded) {
             final patients = state.patients;
+            final doctors = state.doctors;
+
             if (patients.isEmpty) {
               return const Center(child: Text('No patients found'));
             }
+
             return RefreshIndicator(
               onRefresh: () async {
                 context.read<PatientBloc>().add(LoadPatients());
@@ -38,9 +41,12 @@ class PatientListScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final p = patients[index];
                   return Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     child: ListTile(
-                      title: Text(p.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      title: Text(p.name,
+                          style:
+                              const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text('${p.department} • ${p.status}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -53,7 +59,8 @@ class PatientListScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (_) => BlocProvider.value(
                                     value: context.read<PatientBloc>(),
-                                    child: PatientFormScreen(patient: p),
+                                    child: PatientFormScreen(
+                                        patient: p, doctors: doctors),
                                   ),
                                 ),
                               );
@@ -80,20 +87,32 @@ class PatientListScreen extends StatelessWidget {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider.value(
-                value: context.read<PatientBloc>(),
-                child: const PatientFormScreen(),
-              ),
-            ),
-          );
-          context.read<PatientBloc>().add(LoadPatients());
+      floatingActionButton: BlocBuilder<PatientBloc, PatientState>(
+        builder: (context, state) {
+          // Only show FAB when doctors are loaded
+          if (state is PatientLoaded) {
+            final doctors = state.doctors;
+            return FloatingActionButton(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: context.read<PatientBloc>(),
+                      child: PatientFormScreen(
+                        doctors: doctors,
+                      ),
+                    ),
+                  ),
+                );
+                context.read<PatientBloc>().add(LoadPatients());
+              },
+              child: const Icon(Icons.add),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
         },
-        child: const Icon(Icons.add),
       ),
     );
   }

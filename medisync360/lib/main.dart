@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medisync360/Repositiories/chatbot_repository.dart';
+import 'package:medisync360/Repositiories/doctor_repository.dart';
 import 'package:medisync360/Repositiories/patient_repositories.dart';
 import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients_bloc.dart';
 import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients_event.dart';
@@ -31,6 +32,7 @@ void main() {
           BlocProvider<PatientBloc>(
             create: (context) => PatientBloc(
               PatientRepository(),
+              DoctorRepository()
             )..add(LoadPatients()),
           ),
 

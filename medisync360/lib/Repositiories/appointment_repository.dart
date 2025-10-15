@@ -1,6 +1,4 @@
-import 'package:medisync360/models/appointment.dart';
-import 'package:medisync360/models/doctor_models.dart';
-
+import 'package:medisync360/models/appointment_model.dart';
 
 class AppointmentRepository {
   Future<List<Doctor>> getDoctors() async {

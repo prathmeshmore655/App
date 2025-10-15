@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medisync360/Repositiories/doctor_repository.dart';
 import 'package:medisync360/Repositiories/patient_repositories.dart';
 import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Bed%20Management/bed_management.dart';
 import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Overview/hospital_overview_page.dart';
@@ -49,7 +50,7 @@ class _HospitalDashboardScreenState extends State<HospitalDashboardScreen> {
                 break;
               case 2:
                 content = BlocProvider(
-                create: (context) => PatientBloc(PatientRepository())..add(LoadPatients()),
+                create: (context) => PatientBloc(PatientRepository() , DoctorRepository())..add(LoadPatients()),
                 child: const PatientListScreen(),
                 );
                 break;

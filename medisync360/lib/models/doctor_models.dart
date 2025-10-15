@@ -1,26 +1,22 @@
-// models/doctor.dart
-class Doctor {
-  final String id;
-  final String name;
+class DoctorModel {
+  final int id;
+  final String fullName;
   final String specialization;
+  final String department;
 
-  Doctor({required this.id, required this.name, required this.specialization});
-}
+  DoctorModel({
+    required this.id,
+    required this.fullName,
+    required this.specialization,
+    required this.department,
+  });
 
-// models/hospital.dart
-class Hospital {
-  final String id;
-  final String name;
-  final String location;
-
-  Hospital({required this.id, required this.name, required this.location});
-}
-
-// models/appointment_slot.dart
-class AppointmentSlot {
-  final String id;
-  final String time;
-  final bool isAvailable;
-
-  AppointmentSlot({required this.id, required this.time, required this.isAvailable});
+  factory DoctorModel.fromJson(Map<String, dynamic> json) {
+    return DoctorModel(
+      id: json['id'],
+      fullName: json['full_name'] ?? '',
+      specialization: json['specialization'] ?? '',
+      department: json['department'] ?? '',
+    );
+  }
 }

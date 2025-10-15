@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:medisync360/models/doctor_models.dart';
 import 'package:medisync360/models/patients_model.dart';
 
 abstract class PatientState extends Equatable {
@@ -14,7 +15,8 @@ class PatientLoading extends PatientState {}
 
 class PatientLoaded extends PatientState {
   final List<PatientModel> patients;
-  const PatientLoaded(this.patients);
+  final List<DoctorModel> doctors;
+  const PatientLoaded({required this.patients, required this.doctors});
 }
 
 class PatientError extends PatientState {
