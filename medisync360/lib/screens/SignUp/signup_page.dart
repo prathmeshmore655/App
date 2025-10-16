@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medisync360/Repositiories/auth_repository.dart';
+import 'package:medisync360/screens/Hospital%20Screens/hospital_dashboard_page.dart';
 import 'package:medisync360/screens/SignUp/signup_bloc.dart';
 import 'package:medisync360/screens/SignUp/signup_event.dart';
 import 'package:medisync360/screens/SignUp/signup_state.dart';
@@ -240,7 +241,7 @@ class SignupScreen extends StatelessWidget {
               backgroundColor: Colors.green,
             ),
           );
-          Navigator.pushReplacementNamed(context, '/home');
+          Navigator.pushReplacementNamed(context, MaterialPageRoute(builder:(context) => HospitalDashboardScreen()) as String);
         } else if (state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -537,7 +538,7 @@ class SignupScreen extends StatelessWidget {
           state.userType == "doctor" ? "Professional Information" : "Hospital Information"
         ),
         const SizedBox(height: 16),
-        
+
         if (state.userType == "doctor") ...[
           _buildTextField(
             context: context,
@@ -573,8 +574,317 @@ class SignupScreen extends StatelessWidget {
             icon: Icons.numbers_outlined,
             onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("registration_number", v)),
           ),
+
+          const SizedBox(height: 12),
+          // Address block
+          _buildTextField(
+            context: context,
+            label: "Address",
+            icon: Icons.location_city_outlined,
+            onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("address", v)),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "City",
+                  icon: Icons.location_on_outlined,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("city", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "State",
+                  icon: Icons.map_outlined,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("state", v)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Pincode",
+                  icon: Icons.pin_drop_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("pincode", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Contact Number",
+                  icon: Icons.phone_outlined,
+                  keyboardType: TextInputType.phone,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("contact_number", v)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Contact / online info
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Hospital Email (optional)",
+                  icon: Icons.email_outlined,
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("email", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Website (optional)",
+                  icon: Icons.link_outlined,
+                  keyboardType: TextInputType.url,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("website", v)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Established Year",
+                  icon: Icons.calendar_today_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("established_year", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Hospital Type (e.g., Cardiology)",
+                  icon: Icons.medical_services_outlined,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("type", v)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Emergency services toggle
+          StatefulBuilder(
+            builder: (context, setStateSB) {
+              bool emergency = false;
+              // try to infer initial value from state.profile if available
+              try {
+                final val = ((state as dynamic).profile ?? {})['emergency_services'];
+                if (val is bool) emergency = val;
+                if (val is String) emergency = val.toLowerCase() == 'true';
+              } catch (_) {}
+              return SwitchListTile(
+                title: const Text("Emergency Services"),
+                value: emergency,
+                onChanged: (v) {
+                  setStateSB(() {
+                    emergency = v;
+                  });
+                  context.read<SignupBloc>().add(SignupProfileDataChanged("emergency_services", v.toString()));
+                },
+              );
+            },
+          ),
+
+          const SizedBox(height: 12),
+          // Description / notes
+          const Text(
+            "Description",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.blueGrey,
+            ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            maxLines: 3,
+            keyboardType: TextInputType.multiline,
+            decoration: InputDecoration(
+              hintText: "Short description about the hospital",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.blue),
+              ),
+              prefixIcon: const Icon(Icons.description_outlined, color: Colors.grey),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            ),
+            onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("description", v)),
+          ),
+
+          const SizedBox(height: 16),
+          _buildSectionHeader("Staff & Capacity"),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Total Staff",
+                  icon: Icons.group_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("total_staff", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Total Doctors",
+                  icon: Icons.person_outline,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("total_doctors", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Total Nurses",
+                  icon: Icons.healing_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("total_nurses", v)),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+          _buildSectionHeader("Bed & Facility Details"),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Total Beds",
+                  icon: Icons.bed_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("total_beds", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Occupied Beds",
+                  icon: Icons.event_seat_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("occupied_beds", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "ICU Beds",
+                  icon: Icons.local_hospital_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("icu_beds", v)),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Ventilators",
+                  icon: Icons.airline_seat_flat_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("ventilators", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "General Ward Beds",
+                  icon: Icons.bedroom_parent_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("general_ward", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Emergency Beds",
+                  icon: Icons.local_hospital,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("emergency_beds", v)),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Cardiology Beds",
+                  icon: Icons.favorite_outline,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("cardiology_beds", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Pediatrics Beds",
+                  icon: Icons.child_care_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("pediatrics_beds", v)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTextField(
+                  context: context,
+                  label: "Surgery Beds",
+                  icon: Icons.local_hospital_outlined,
+                  keyboardType: TextInputType.number,
+                  onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("surgery_beds", v)),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+          _buildTextField(
+            context: context,
+            label: "Maternity Beds",
+            icon: Icons.pregnant_woman_outlined,
+            keyboardType: TextInputType.number,
+            onChanged: (v) => context.read<SignupBloc>().add(SignupProfileDataChanged("maternity_beds", v)),
+          ),
         ],
-        
+
         const SizedBox(height: 16),
         _buildLocationSection(state, context),
       ],
@@ -611,23 +921,8 @@ class SignupScreen extends StatelessWidget {
           icon: const Icon(Icons.location_on_outlined, size: 20),
           label: const Text("Fetch Current Location"),
         ),
-        // if (state.isFetchingLocation) ...[
-        //   const SizedBox(height: 8),
-        //   const Row(
-        //     children: [
-        //       SizedBox(
-        //         width: 16,
-        //         height: 16,
-        //         child: CircularProgressIndicator(strokeWidth: 2),
-        //       ),
-        //       SizedBox(width: 8),
-        //       Text(
-        //         "Fetching location...",
-        //         style: TextStyle(fontSize: 12, color: Colors.grey),
-        //       ),
-        //     ],
-        //   ),
-        // ],
+
+
         if (state.latitude != null && state.longitude != null) ...[
           const SizedBox(height: 8),
           Container(
@@ -654,45 +949,6 @@ class SignupScreen extends StatelessWidget {
       ],
     );
   }
-
-  // Widget _buildTermsAgreement(SignupState state, BuildContext context) {
-  //   return Row(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       SizedBox(
-  //         width: 20,
-  //         height: 20,
-  //         child: Checkbox(
-  //           value: state.agreedToTerms,
-  //           onChanged: (value) {
-  //             context.read<SignupBloc>().add(SignupTermsChanged(value ?? false));
-  //           },
-  //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-  //         ),
-  //       ),
-  //       const SizedBox(width: 12),
-  //       Expanded(
-  //         child: RichText(
-  //           text: const TextSpan(
-  //             text: "I agree to the ",
-  //             style: TextStyle(color: Colors.grey, fontSize: 12),
-  //             children: [
-  //               TextSpan(
-  //                 text: "Terms of Service",
-  //                 style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
-  //               ),
-  //               TextSpan(text: " and "),
-  //               TextSpan(
-  //                 text: "Privacy Policy",
-  //                 style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildSignupButton(SignupState state, BuildContext context) {
     return SizedBox(

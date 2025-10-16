@@ -54,52 +54,82 @@ Future<bool> login(String username, String password, String userType) async {
 
   /// 🔹 Real Signup API (User / Doctor / Hospital)
   Future<Map<String, dynamic>> signup({
-    required String username,
-    required String email,
-    required String password,
-    required String userType,
-    Map<String, dynamic>? profileData,
-    double? latitude,
-    double? longitude,
-  }) async {
-    try {
-      final url = Uri.parse("$baseUrl/signup/");
+  required String username,
+  required String email,
+  required String password,
+  required String userType,
+  Map<String, dynamic>? profileData,
+}) async {
+  try {
+    final url = Uri.parse("$BASE_URL/auth/signup/");
 
-      final Map<String, dynamic> requestBody = {
-        "username": username,
-        "password": password,
-        "email": email,
-        "user_type": userType,
+    final Map<String, dynamic> requestBody = {
+      "username": username,
+      "password": password,
+      "email": email,
+      "user_type": userType,
+    };
+
+    // Add profile_data if doctor or hospital
+    if (userType == "doctor" || userType == "hospital") {
+      final data = Map<String, dynamic>.from(profileData ?? {});
+
+      // Build a structured profile_data for hospital or doctor
+      requestBody["profile_data"] = {
+        "name": data["name"],
+        "registration_number": data["registration_number"],
+        "address": data["address"],
+        "city": data["city"],
+        "state": data["state"],
+        "pincode": data["pincode"],
+        "contact_number": data["contact_number"],
+        "email": data["email"],
+        "website": data["website"],
+        "established_year": data["established_year"],
+        "description": data["description"],
+
+        // Hospital facilities
+        "type": data["type"],
+        "emergency_services": data["emergency_services"] ?? false,
+
+        // Location information
+        "latitude": data["latitude"],
+        "longitude": data["longitude"],
+
+        // Staff and capacity
+        "total_staff": data["total_staff"] ?? 0,
+        "total_doctors": data["total_doctors"] ?? 0,
+        "total_nurses": data["total_nurses"] ?? 0,
+
+        // Bed information
+        "total_beds": data["total_beds"] ?? 0,
+        "occupied_beds": data["occupied_beds"] ?? 0,
+        "icu_beds": data["icu_beds"] ?? 0,
+        "ventilators": data["ventilators"] ?? 0,
+        "general_ward": data["general_ward"] ?? 0,
+        "emergency_beds": data["emergency_beds"] ?? 0,
+        "cardiology_beds": data["cardiology_beds"] ?? 0,
+        "pediatrics_beds": data["pediatrics_beds"] ?? 0,
+        "surgery_beds": data["surgery_beds"] ?? 0,
+        "maternity_beds": data["maternity_beds"] ?? 0,
       };
-
-      // Add profile_data if doctor or hospital
-      if (userType == "doctor" || userType == "hospital") {
-        final data = Map<String, dynamic>.from(profileData ?? {});
-
-        // inject lat/long if available
-        if (latitude != null && longitude != null) {
-          data["latitude"] = latitude;
-          data["longitude"] = longitude;
-        }
-
-        requestBody["profile_data"] = data;
-      }
-
-      final response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(requestBody),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final res = jsonDecode(response.body);
-        return {"success": true, "message": res["message"] ?? "Signup success"};
-      } else {
-        final res = jsonDecode(response.body);
-        return {"success": false, "message": res["message"] ?? "Signup failed"};
-      }
-    } catch (e) {
-      return {"success": false, "message": "Error: $e"};
     }
+
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final res = jsonDecode(response.body);
+      return {"success": true, "message": res["message"] ?? "Signup success"};
+    } else {
+      final res = jsonDecode(response.body);
+      return {"success": false, "message": res["message"] ?? "Signup failed"};
+    }
+  } catch (e) {
+    return {"success": false, "message": "Error: $e"};
   }
+}
 }

@@ -326,8 +326,9 @@ class BedManagementSection extends StatelessWidget {
   }
 
   Widget _buildBedTypeItem(String type, String count, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(12),
+    return SingleChildScrollView(
+      child: Container(
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: color.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
@@ -369,7 +370,8 @@ class BedManagementSection extends StatelessWidget {
           ),
         ],
       ),
-    );
+    )
+  );
   }
 
   Widget _buildActionButton(String text, IconData icon, Color color, VoidCallback onTap) {
