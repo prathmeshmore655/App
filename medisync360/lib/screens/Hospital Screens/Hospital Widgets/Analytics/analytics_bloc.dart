@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:medisync360/Services/api_service.dart';
 import 'analytics_event.dart';
 import 'analytics_state.dart';
 
@@ -11,21 +14,45 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
       LoadAnalytics event, Emitter<AnalyticsState> emit) async {
     emit(state.copyWith(isLoading: true));
 
-    // simulate data fetching delay
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final response = await ApiService.request(
+        '/auth/department-analytics/hospital/',
+        method: 'GET',
+      );
 
-    emit(state.copyWith(
-      isLoading: false,
-      bedOccupancy: 78.5,
-      monthlyAdmissions: [40, 45, 50, 60, 55, 65, 70, 60, 50, 58, 62, 66],
-      monthlyDischarges: [30, 38, 45, 48, 42, 55, 60, 58, 49, 54, 57, 61],
-      departmentDistribution: {
-        "ICU": 12,
-        "General": 35,
-        "Emergency": 15,
-        "Maternity": 10,
-        "Surgery": 20,
-      },
-    ));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+
+        // Parse department-wise patient distribution
+        final departmentDistribution = {
+          for (var d in data) d['name']: d['patients'] as int
+        };
+
+        // Calculate bed occupancy (average of all departments)
+        double totalOccupancy = 0;
+        for (var d in data) {
+          totalOccupancy += (d['occupancy'] as num).toDouble();
+        }
+        final avgOccupancy =
+            data.isEmpty ? 0 : (totalOccupancy / data.length) * 100;
+
+        // Example dummy data for monthly admissions/discharges
+        final monthlyAdmissions = List.generate(12, (i) => (i + 3) * 2);
+        final monthlyDischarges = List.generate(12, (i) => (i + 2) * 2);
+
+        emit(state.copyWith(
+          isLoading: false,
+          bedOccupancy: avgOccupancy.toDouble(),
+          departmentDistribution: departmentDistribution.map((key, value) => MapEntry(key, value as int)),
+          monthlyAdmissions: monthlyAdmissions,
+          monthlyDischarges: monthlyDischarges,
+        ));
+      } else {
+        emit(state.copyWith(isLoading: false));
+      }
+    } catch (e) {
+      print("Error loading analytics: $e");
+      emit(state.copyWith(isLoading: false));
+    }
   }
 }

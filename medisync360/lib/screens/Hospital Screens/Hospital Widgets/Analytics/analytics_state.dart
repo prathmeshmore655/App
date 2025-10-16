@@ -2,14 +2,14 @@ import 'package:equatable/equatable.dart';
 
 class AnalyticsState extends Equatable {
   final bool isLoading;
-  final double bedOccupancy; // %
-  final List<int> monthlyAdmissions; // 12 months
-  final List<int> monthlyDischarges; // 12 months
-  final Map<String, int> departmentDistribution; // ward -> count
+  final double bedOccupancy;
+  final List<int> monthlyAdmissions;
+  final List<int> monthlyDischarges;
+  final Map<String, int> departmentDistribution;
 
   const AnalyticsState({
-    this.isLoading = true,
-    this.bedOccupancy = 0.0,
+    this.isLoading = false,
+    this.bedOccupancy = 0,
     this.monthlyAdmissions = const [],
     this.monthlyDischarges = const [],
     this.departmentDistribution = const {},
@@ -33,6 +33,11 @@ class AnalyticsState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [isLoading, bedOccupancy, monthlyAdmissions, monthlyDischarges, departmentDistribution];
+  List<Object?> get props => [
+        isLoading,
+        bedOccupancy,
+        monthlyAdmissions,
+        monthlyDischarges,
+        departmentDistribution
+      ];
 }
