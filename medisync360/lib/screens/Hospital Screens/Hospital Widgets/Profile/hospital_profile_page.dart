@@ -32,7 +32,7 @@ class HospitalProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(h.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                        Text(h.type, style: const TextStyle(fontSize: 16, color: Colors.grey)),
+                        Text(h.type.toString(), style: const TextStyle(fontSize: 16, color: Colors.grey)),
                         const SizedBox(height: 12),
                         Row(
                           children: [
@@ -49,8 +49,7 @@ class HospitalProfileScreen extends StatelessWidget {
                         Text("🏥 Reg. No: ${h.registrationNumber}"),
                         const Divider(height: 30),
                         Text("Total Beds: ${h.totalBeds} (Occupied: ${h.occupiedBeds})"),
-                        Text("ICU Beds: ${h.icuBeds}"),
-                        Text("Ventilators: ${h.ventilators}"),
+                        Text("ICU Beds: ${h.icuBedsTotal}"),
                         Text("Doctors: ${h.totalDoctors} | Nurses: ${h.totalNurses} | Staff: ${h.totalStaff}"),
                         const Divider(height: 30),
                         if (h.website != null)

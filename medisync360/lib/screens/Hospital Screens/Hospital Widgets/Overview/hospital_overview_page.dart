@@ -149,7 +149,7 @@ class _HospitalOverviewSectionState extends State<HospitalOverviewSection>
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    widget.hospital.type,
+                    widget.hospital.type.toString(),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
@@ -212,7 +212,7 @@ class _HospitalOverviewSectionState extends State<HospitalOverviewSection>
               ),
               const SizedBox(height: 4),
               Text(
-                widget.hospital.type,
+                widget.hospital.type.toString(),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.w600,
@@ -353,7 +353,7 @@ class _HospitalOverviewSectionState extends State<HospitalOverviewSection>
             [
               _buildContactItem(Icons.location_on, 'Address', widget.hospital.address, isSmallScreen),
               _buildContactItem(Icons.phone, 'Phone', widget.hospital.contactNumber, isSmallScreen),
-              _buildContactItem(Icons.email, 'Email', widget.hospital.email, isSmallScreen),
+              _buildContactItem(Icons.email, 'Email', widget.hospital.email.toString(), isSmallScreen),
               _buildContactItem(Icons.badge, 'Registration', widget.hospital.registrationNumber, isSmallScreen),
             ],
             isSmallScreen,
@@ -366,7 +366,7 @@ class _HospitalOverviewSectionState extends State<HospitalOverviewSection>
             'Hospital Details',
             Icons.info,
             [
-              _buildDetailItem('Hospital Type', widget.hospital.type, isSmallScreen),
+              _buildDetailItem('Hospital Type', widget.hospital.type.toString(), isSmallScreen),
               _buildDetailItem('Established', widget.hospital.establishedYear.toString(), isSmallScreen),
               _buildDetailItem('Registration', widget.hospital.registrationNumber, isSmallScreen),
             ],
@@ -471,7 +471,10 @@ class _HospitalOverviewSectionState extends State<HospitalOverviewSection>
               borderRadius: BorderRadius.circular(isSmallScreen ? 8.0 : 12.0),
               child: FlutterMap(
                 options: MapOptions(
-                  initialCenter: LatLng(widget.hospital.latitude, widget.hospital.longitude),
+                  initialCenter: LatLng(
+                    (widget.hospital.latitude ?? 0.0).toDouble(),
+                    (widget.hospital.longitude ?? 0.0).toDouble(),
+                  ),
                   initialZoom: isSmallScreen ? 14 : 15,
                 ),
                 children: [
@@ -482,7 +485,10 @@ class _HospitalOverviewSectionState extends State<HospitalOverviewSection>
                   MarkerLayer(
                     markers: [
                       Marker(
-                        point: LatLng(widget.hospital.latitude, widget.hospital.longitude),
+                        point: LatLng(
+                          (widget.hospital.latitude ?? 0.0).toDouble(),
+                          (widget.hospital.longitude ?? 0.0).toDouble(),
+                        ),
                         width: isSmallScreen ? 40 : 60,
                         height: isSmallScreen ? 40 : 60,
                         child: Icon(

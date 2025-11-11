@@ -12,6 +12,7 @@ import 'package:medisync360/screens/User%20Screens/ml_analyzers.dart';
 import 'package:medisync360/screens/User%20Screens/my_vault.dart';
 import 'package:medisync360/screens/User%20Screens/sos_screen.dart';
 import 'package:medisync360/widgets/mapwidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import "Profile/profile_page.dart";
 
 class HomeScreen extends StatefulWidget {
@@ -22,9 +23,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+  String username = '' ;
+  String email = '' ;
+
   @override
   void initState() {
     super.initState();
+    LoadUserData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _ensureLocationPermission();
     });
@@ -82,8 +89,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> LoadUserData () async {
+
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      username = pref.getString('username')!;
+      email = pref.getString('email')!;
+      
+
+    }); 
+    
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -132,6 +153,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      // notification drop box logic
+                    },
+                    borderRadius: BorderRadius.circular(20),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 6),
+                          Icon(Icons.notifications) ,                          
+                          SizedBox(width: 6),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+                ,
+
+                const SizedBox(width: 16),
                 
                 // Profile Section
                 InkWell(
@@ -140,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => BlocProvider(
-                          create: (_) => UserBloc(UserRepository as UserRepository),
+                          create: (_) => UserBloc(UserRepository()),
                           child: const UserProfileScreen(),
                         ),
                       ),
@@ -153,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         CircleAvatar(
                           radius: 16,
@@ -162,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          "username",
+                          username,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,

@@ -223,25 +223,19 @@ class BedManagementSection extends StatelessWidget {
           children: [
             _buildBedTypeItem(
               "ICU Beds",
-              hospital.icuBeds.toString(),
+              hospital.icuBedsTotal.toString(),
               Icons.local_hospital,
               Colors.red,
             ),
             _buildBedTypeItem(
-              "Ventilators",
-              hospital.ventilators.toString(),
-              Icons.air,
-              Colors.purple,
-            ),
-            _buildBedTypeItem(
               "General Ward",
-              (hospital.totalBeds - hospital.icuBeds).toString(),
+              (hospital.totalBeds - hospital.generalWardTotal).toString(),
               Icons.king_bed,
               Colors.blue,
             ),
             _buildBedTypeItem(
               "Emergency",
-              "0", // You can add this field to your model
+              hospital.emergencyBedsTotal.toString(), 
               Icons.emergency,
               Colors.orange,
             ),

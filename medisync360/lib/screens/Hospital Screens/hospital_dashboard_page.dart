@@ -6,8 +6,8 @@
   import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Analytics/analytics_bloc.dart';
   import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Analytics/analytics_event.dart';
   import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Bed%20Management/bed_management.dart';
-import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Live%20Capacity%20View/live_capacity_view.dart';
-import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Nearby%20Hospitals/nearby_hospitals.dart';
+  import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Live%20Capacity%20View/live_capacity_view.dart';
+  import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Nearby%20Hospitals/nearby_hospitals.dart';
   import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Overview/hospital_overview_page.dart';
   import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients.dart';
   import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Patients/patients_bloc.dart';
@@ -347,7 +347,7 @@ import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Nearby
                 title: Text("Live Capacity View"),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LiveCapacityView()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HospitalCapacityScreen()));
                   // Handle logout
                 },
               ),

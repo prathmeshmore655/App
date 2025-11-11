@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:medisync360/Services/api_service.dart';
 import 'package:medisync360/models/hospital_beds_model.dart';
 import 'package:medisync360/models/hospital_model.dart';
+import 'package:medisync360/screens/Hospital%20Screens/Hospital%20Widgets/Live%20Capacity%20View/live_capacity_view_model.dart';
 
 
 class HospitalRepository {
@@ -27,4 +28,19 @@ class HospitalRepository {
       throw Exception("Failed to load hospital beds data");
     }
   }
+
+
+
+    Future<List<HospitalLiveCapacity>> fetchHospitalsLiveCapacity() async {
+    final response = await ApiService.request('/auth/hospital/live-capacity-view/');
+
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body);
+      return data.map((e) => HospitalLiveCapacity.fromJson(e)).toList();
+    } else {
+      throw Exception('Failed to load hospitals');
+    }
+
+  }
+
 }
