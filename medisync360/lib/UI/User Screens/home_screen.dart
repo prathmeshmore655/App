@@ -4,8 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:medisync360/Data/Repositories/user_repository.dart';
 import 'package:medisync360/UI/Login/login_page.dart';
 import 'package:medisync360/UI/User%20Screens/Appointment/my_appointments.dart';
-import 'package:medisync360/UI/User%20Screens/Chatbot/chatbot_bloc.dart';
-import 'package:medisync360/UI/User%20Screens/Chatbot/chatbot_screen.dart';
 import 'package:medisync360/UI/User%20Screens/Profile/profile_bloc.dart';
 import 'package:medisync360/UI/User%20Screens/Appointment/appointment.dart';
 import 'package:medisync360/UI/User%20Screens/ml_analyzers.dart';
@@ -289,14 +287,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildDrawerItem(
                       icon: Icons.chat,
                       title: 'Chatbot',
-                      onTap: () => Navigator.push(context,  MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                value: context.read<ChatbotBloc>(),
-                                child: const ChatbotScreen(),
-                              ),
-                    ),
+                      onTap: () {
+                        print("Chabot button is clicked");
+                      },
                       ),
-                    ),
                     _buildDrawerItem(
                       icon: Icons.psychology,
                       title: 'ML Analyzers',
@@ -318,6 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () => _navigateTo(context, const MyVault()),
                     ),
                   ],
+          
                 ),
               ),
               

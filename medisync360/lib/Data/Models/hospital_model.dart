@@ -1,3 +1,5 @@
+import 'package:medisync360/Domain/Entities/Hospital/hospital_entities.dart';
+
 class HospitalModel {
   final String id;
   final String name;
@@ -125,4 +127,43 @@ class HospitalModel {
       maternityBedsOccupied: json['maternity_beds_occupied'] ?? 0,
     );
   }
+
+
+  HospitalEntities toDomain() {
+
+    return HospitalEntities(
+      id: id, 
+      name: name, 
+      registrationNumber: registrationNumber, 
+      address: address, 
+      city: city, 
+      state: state, 
+      pincode: pincode, 
+      contactNumber: contactNumber, 
+      emergencyServices: emergencyServices, 
+      totalStaff: totalStaff, 
+      totalDoctors: totalDoctors, 
+      totalNurses: totalNurses, 
+      rating: rating, 
+      totalBeds: totalBeds, 
+      occupiedBeds: occupiedBeds, 
+      icuBedsTotal: icuBedsTotal, 
+      icuBedsOccupied: icuBedsOccupied, 
+      emergencyBedsTotal: emergencyBedsTotal, 
+      emergencyBedsOccupied: emergencyBedsOccupied, 
+      generalWardTotal: generalWardTotal, 
+      generalWardOccupied: generalWardOccupied, 
+      cardiologyBedsTotal: cardiologyBedsTotal, 
+      cardiologyBedsOccupied: cardiologyBedsOccupied, 
+      pediatricsBedsTotal: pediatricsBedsTotal, 
+      pediatricsBedsOccupied: pediatricsBedsOccupied, 
+      surgeryBedsTotal: surgeryBedsTotal, 
+      surgeryBedsOccupied: surgeryBedsOccupied, 
+      maternityBedsTotal: maternityBedsTotal, 
+      maternityBedsOccupied: maternityBedsOccupied
+    
+    );
+  }
+
+  
 }

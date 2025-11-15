@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medisync360/UI/Hospital%20Screens/Hospital%20Widgets/Live%20Capacity%20View/live_capacity_view_model.dart';
+import 'package:medisync360/Domain/Entities/Hospital/live_caapcity_view_entities.dart';
 
 class LiveCapacityViewScreen extends StatelessWidget {
-  final List<HospitalLiveCapacity> hospitals;
+  final List<LiveCaapcityViewEntities> hospitals;
 
   const LiveCapacityViewScreen({super.key, required this.hospitals});
 
@@ -25,7 +25,7 @@ class LiveCapacityViewScreen extends StatelessWidget {
 }
 
 class HospitalCard extends StatelessWidget {
-  final HospitalLiveCapacity hospital;
+  final LiveCaapcityViewEntities hospital;
   const HospitalCard({super.key, required this.hospital});
 
   double _calculateCapacity(int occupied, int total) {

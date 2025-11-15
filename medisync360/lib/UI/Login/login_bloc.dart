@@ -21,7 +21,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final isUsernameValid = state.username.isNotEmpty;
       final isValid = isUsernameValid && isPasswordValid;
 
-      print(isValid);
       emit(state.copyWith(password: password, isValid: isValid));
     });
 

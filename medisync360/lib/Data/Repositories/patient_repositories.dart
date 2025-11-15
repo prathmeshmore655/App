@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:medisync360/Domain/Entities/Hospital/patient_entities.dart';
+import 'package:medisync360/Domain/Repositories/patient_repositories_domain.dart';
 import 'package:medisync360/utils/Services/api_service.dart';
 import 'package:medisync360/Data/Models/patients_model.dart';
 
-class PatientRepository {
+class PatientRepository implements PatientRepositoriesDomain{
   // ----------------------------------------------------
   // ✅ Get All Patients
   // ----------------------------------------------------
+  @override
   Future<List<PatientEntities>> getPatients() async {
     final response = await ApiService.request('/auth/patient/read/');
 
@@ -24,6 +26,8 @@ class PatientRepository {
   // ----------------------------------------------------
   // ✅ Create Patient
   // ----------------------------------------------------
+
+  @override
   Future<PatientEntities> addPatient(PatientEntities patient) async {
     final response = await ApiService.request(
       '/auth/patient/create/',
@@ -65,6 +69,8 @@ class PatientRepository {
   // ----------------------------------------------------
   // ✅ Update Patient
   // ----------------------------------------------------
+  
+  @override
   Future<PatientEntities> updatePatient(PatientModel patient) async {
     final response = await ApiService.request(
       '/auth/patient/update/${patient.id}/',
@@ -83,6 +89,8 @@ class PatientRepository {
   // ----------------------------------------------------
   // ✅ Delete Patient
   // ----------------------------------------------------
+
+  @override
   Future<void> deletePatient(int patientId) async {
     final response = await ApiService.request(
       '/auth/patient/delete/$patientId/',

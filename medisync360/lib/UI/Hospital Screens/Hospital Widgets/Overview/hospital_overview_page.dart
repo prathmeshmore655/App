@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:medisync360/Data/Models/hospital_model.dart';
-import 'package:medisync360/Data/Models/hospital_beds_model.dart';
+import 'package:medisync360/Domain/Entities/Hospital/hospital_beds_entities.dart';
+import 'package:medisync360/Domain/Entities/Hospital/hospital_entities.dart';
 
 class HospitalOverviewSection extends StatefulWidget {
-  final HospitalModel hospital;
-  final HospitalBedsModel beds;
+  final HospitalEntities hospital;
+  final HospitalBedsEntities beds;
 
   const HospitalOverviewSection({
     Key? key,

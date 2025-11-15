@@ -1,13 +1,11 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:medisync360/Data/Repositories/chatbot_repository.dart';
 import 'package:medisync360/Data/Repositories/doctor_repository.dart';
 import 'package:medisync360/Data/Repositories/patient_repositories.dart';
 import 'package:medisync360/UI/Hospital%20Screens/Hospital%20Widgets/Patients/patients_bloc.dart';
 import 'package:medisync360/UI/Hospital%20Screens/Hospital%20Widgets/Patients/patients_event.dart';
 import 'package:medisync360/UI/Login/login_page.dart';
-import 'package:medisync360/UI/User%20Screens/Chatbot/chatbot_bloc.dart';
 import 'utils/theme/app_theme.dart';
 
 
@@ -16,17 +14,9 @@ void main() {
     // Provide repository & bloc globally
     MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<ChatbotRepository>(
-          create: (_) => ChatbotRepository(),
-        ),
-        
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<ChatbotBloc>(
-            create: (context) =>
-                ChatbotBloc(context.read<ChatbotRepository>()),
-          ),
 
           BlocProvider<PatientBloc>(
             create: (context) => PatientBloc(

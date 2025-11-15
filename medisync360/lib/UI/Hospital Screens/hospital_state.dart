@@ -1,5 +1,6 @@
-import '../../Data/Models/hospital_model.dart';
-import '../../Data/Models/hospital_beds_model.dart';
+import 'package:medisync360/Domain/Entities/Hospital/hospital_beds_entities.dart';
+import 'package:medisync360/Domain/Entities/Hospital/hospital_entities.dart';
+
 
 abstract class HospitalState {}
 
@@ -8,8 +9,8 @@ class HospitalInitial extends HospitalState {}
 class HospitalLoading extends HospitalState {}
 
 class HospitalLoaded extends HospitalState {
-  final HospitalModel hospital;
-  final HospitalBedsModel beds;
+  final HospitalEntities hospital;
+  final HospitalBedsEntities beds;
 
   HospitalLoaded(this.hospital, this.beds);
 }

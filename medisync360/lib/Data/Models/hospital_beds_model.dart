@@ -1,3 +1,5 @@
+import 'package:medisync360/Domain/Entities/Hospital/hospital_beds_entities.dart';
+
 class HospitalBedsModel {
   final int generalWard;
   final int icuBeds;
@@ -28,4 +30,18 @@ class HospitalBedsModel {
       maternityBeds: json['maternity_beds'] ?? 0,
     );
   }
+
+  HospitalBedsEntities toDomain () {
+
+    return HospitalBedsEntities(
+      generalWard: generalWard, 
+      icuBeds: icuBeds, 
+      emergencyBeds: emergencyBeds, 
+      cardiologyBeds: cardiologyBeds, 
+      pediatricsBeds: pediatricsBeds, 
+      surgeryBeds: surgeryBeds, 
+      maternityBeds: maternityBeds
+    );
+  }
+  
 }

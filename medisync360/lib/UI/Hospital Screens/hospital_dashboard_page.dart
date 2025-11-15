@@ -619,70 +619,70 @@
       );
     }
 
-    Widget _buildAnalyticsPlaceholder() {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.analytics_outlined,
-                  size: 60,
-                  color: Colors.blueAccent,
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                "Analytics Dashboard",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.blueAccent,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                "Comprehensive analytics and insights\ncoming soon",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 2,
-                ),
-                child: const Text(
-                  "Get Notified",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+    // Widget _buildAnalyticsPlaceholder() {
+    //   return Center(
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(40),
+    //       child: Column(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         children: [
+    //           Container(
+    //             width: 120,
+    //             height: 120,
+    //             decoration: BoxDecoration(
+    //               color: Colors.blueAccent.withOpacity(0.1),
+    //               shape: BoxShape.circle,
+    //             ),
+    //             child: const Icon(
+    //               Icons.analytics_outlined,
+    //               size: 60,
+    //               color: Colors.blueAccent,
+    //             ),
+    //           ),
+    //           const SizedBox(height: 24),
+    //           const Text(
+    //             "Analytics Dashboard",
+    //             style: TextStyle(
+    //               fontSize: 24,
+    //               fontWeight: FontWeight.w700,
+    //               color: Colors.blueAccent,
+    //             ),
+    //           ),
+    //           const SizedBox(height: 12),
+    //           const Text(
+    //             "Comprehensive analytics and insights\ncoming soon",
+    //             textAlign: TextAlign.center,
+    //             style: TextStyle(
+    //               fontSize: 16,
+    //               color: Colors.grey,
+    //               height: 1.5,
+    //             ),
+    //           ),
+    //           const SizedBox(height: 30),
+    //           ElevatedButton(
+    //             onPressed: () {},
+    //             style: ElevatedButton.styleFrom(
+    //               backgroundColor: Colors.blueAccent,
+    //               foregroundColor: Colors.white,
+    //               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+    //               shape: RoundedRectangleBorder(
+    //                 borderRadius: BorderRadius.circular(12),
+    //               ),
+    //               elevation: 2,
+    //             ),
+    //             child: const Text(
+    //               "Get Notified",
+    //               style: TextStyle(
+    //                 fontWeight: FontWeight.w600,
+    //                 fontSize: 16,
+    //               ),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
     IconData _getTabIcon(int index) {
       switch (index) {

@@ -383,7 +383,6 @@ class LoginScreen extends StatelessWidget {
             errorText: null,
           ),
           onChanged: (value) {
-            print("Changing");
             context.read<LoginBloc>().add(LoginEmailChanged(value));
           },
           textInputAction: TextInputAction.next,

@@ -1,4 +1,6 @@
-class HospitalLiveCapacity {
+import 'package:medisync360/Domain/Entities/Hospital/live_caapcity_view_entities.dart';
+
+class LiveCapacityViewModel {
   final int id;
   final String name;
   final String city;
@@ -23,7 +25,7 @@ class HospitalLiveCapacity {
   final String establishedYear;
   final double rating;
 
-  HospitalLiveCapacity({
+  LiveCapacityViewModel({
     required this.id,
     required this.name,
     required this.city,
@@ -49,8 +51,8 @@ class HospitalLiveCapacity {
     required this.rating,
   });
 
-  factory HospitalLiveCapacity.fromJson(Map<String, dynamic> json) {
-    return HospitalLiveCapacity(
+  factory LiveCapacityViewModel.fromJson(Map<String, dynamic> json) {
+    return LiveCapacityViewModel(
       id: json['id'],
       name: json['name'],
       city: json['city'],
@@ -74,6 +76,36 @@ class HospitalLiveCapacity {
       maternityBedsOccupied: json['maternity_beds_occupied'],
       establishedYear: json['established_year'],
       rating: (json['rating'] as num).toDouble(),
+    );
+  }
+
+
+  LiveCaapcityViewEntities toDomain () {
+
+    return LiveCaapcityViewEntities(
+      id: id, 
+      name: name, 
+      city: city, 
+      state: state, 
+      emergencyServices: emergencyServices, 
+      totalBeds: totalBeds, 
+      occupiedBeds: occupiedBeds, 
+      icuBedsTotal: icuBedsTotal, 
+      icuBedsOccupied: icuBedsOccupied, 
+      emergencyBedsTotal: emergencyBedsTotal, 
+      emergencyBedsOccupied: emergencyBedsOccupied, 
+      generalWardTotal: generalWardTotal, 
+      generalWardOccupied: generalWardOccupied, 
+      cardiologyBedsTotal: cardiologyBedsTotal, 
+      cardiologyBedsOccupied: cardiologyBedsOccupied, 
+      pediatricsBedsTotal: pediatricsBedsTotal, 
+      pediatricsBedsOccupied: pediatricsBedsOccupied, 
+      surgeryBedsTotal: surgeryBedsTotal, 
+      surgeryBedsOccupied: surgeryBedsOccupied, 
+      maternityBedsTotal: maternityBedsTotal, 
+      maternityBedsOccupied: maternityBedsOccupied, 
+      establishedYear: establishedYear, 
+      rating: rating
     );
   }
 }

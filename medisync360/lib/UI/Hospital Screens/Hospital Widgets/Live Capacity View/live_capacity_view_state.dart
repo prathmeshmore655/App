@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:medisync360/UI/Hospital%20Screens/Hospital%20Widgets/Live%20Capacity%20View/live_capacity_view_model.dart';
+import 'package:medisync360/Domain/Entities/Hospital/live_caapcity_view_entities.dart';
 
 abstract class HospitalCapacityState extends Equatable {
   @override
@@ -11,7 +11,7 @@ class HospitalInitial extends HospitalCapacityState {}
 class HospitalLoading extends HospitalCapacityState {}
 
 class HospitalLoaded extends HospitalCapacityState {
-  final List<HospitalLiveCapacity> hospitals;
+  final List<LiveCaapcityViewEntities> hospitals;
   HospitalLoaded(this.hospitals);
 
   @override

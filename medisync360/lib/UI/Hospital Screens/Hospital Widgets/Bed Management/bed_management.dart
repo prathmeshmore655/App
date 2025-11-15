@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medisync360/Data/Models/hospital_model.dart';
+import 'package:medisync360/Domain/Entities/Hospital/hospital_entities.dart';
 
 class BedManagementSection extends StatelessWidget {
-  final HospitalModel hospital;
+  final HospitalEntities hospital;
 
   const BedManagementSection({super.key, required this.hospital});
 
@@ -245,47 +245,47 @@ class BedManagementSection extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActions() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Quick Actions",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.blueGrey[800],
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildActionButton(
-                "Update Beds",
-                Icons.edit,
-                Colors.blueAccent,
-                () {
-                  // Handle update beds action
-                },
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildActionButton(
-                "Add Emergency",
-                Icons.add_alert,
-                Colors.red,
-                () {
-                  // Handle emergency action
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  // Widget _buildQuickActions() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         "Quick Actions",
+  //         style: TextStyle(
+  //           fontSize: 18,
+  //           fontWeight: FontWeight.w600,
+  //           color: Colors.blueGrey[800],
+  //         ),
+  //       ),
+  //       const SizedBox(height: 12),
+  //       Row(
+  //         children: [
+  //           Expanded(
+  //             child: _buildActionButton(
+  //               "Update Beds",
+  //               Icons.edit,
+  //               Colors.blueAccent,
+  //               () {
+  //                 // Handle update beds action
+  //               },
+  //             ),
+  //           ),
+  //           const SizedBox(width: 12),
+  //           Expanded(
+  //             child: _buildActionButton(
+  //               "Add Emergency",
+  //               Icons.add_alert,
+  //               Colors.red,
+  //               () {
+  //                 // Handle emergency action
+  //               },
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildStatCard(String title, String value, IconData icon, Color color) {
     return Column(
@@ -368,20 +368,20 @@ class BedManagementSection extends StatelessWidget {
   );
   }
 
-  Widget _buildActionButton(String text, IconData icon, Color color, VoidCallback onTap) {
-    return ElevatedButton.icon(
-      onPressed: onTap,
-      icon: Icon(icon, size: 18),
-      label: Text(text, style: const TextStyle(fontSize: 14)),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        elevation: 2,
-      ),
-    );
-  }
+  // Widget _buildActionButton(String text, IconData icon, Color color, VoidCallback onTap) {
+  //   return ElevatedButton.icon(
+  //     onPressed: onTap,
+  //     icon: Icon(icon, size: 18),
+  //     label: Text(text, style: const TextStyle(fontSize: 14)),
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: color,
+  //       foregroundColor: Colors.white,
+  //       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+  //       elevation: 2,
+  //     ),
+  //   );
+  // }
 
   Color _getStatusColor(double occupancyRate) {
     if (occupancyRate < 60) return Colors.green;

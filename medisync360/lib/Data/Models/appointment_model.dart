@@ -13,6 +13,19 @@ class Appointment {
     required this.time,
     required this.status,
   });
+
+  factory Appointment.fromJson(Map<String , dynamic> json) {
+
+    return Appointment(
+      id: json['id'], 
+      doctorName: json['doctorName'], 
+      hospitalName: json['hospitalName'], 
+      time: json['time'], 
+      status: json['status']
+    );
+  }
+
+  
 }
 
 

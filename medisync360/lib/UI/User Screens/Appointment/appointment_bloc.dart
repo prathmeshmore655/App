@@ -1,6 +1,5 @@
 // bloc/appointment_bloc.dart
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:medisync360/Data/Repositories/appointment_repository.dart';
 import 'package:medisync360/UI/User%20Screens/Appointment/appointment_event.dart';
 import 'package:medisync360/UI/User%20Screens/Appointment/appointment_state.dart';

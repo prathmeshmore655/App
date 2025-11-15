@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medisync360/Data/Repositories/user_repository.dart';
-import 'package:medisync360/Domain/Entities/User/user_entities.dart';
 import 'package:medisync360/UI/User%20Screens/Profile/profile_event.dart';
 import 'package:medisync360/UI/User%20Screens/Profile/profile_state.dart';
 

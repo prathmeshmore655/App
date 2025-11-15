@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:medisync360/Data/Models/hospital_model.dart';
+import 'package:medisync360/Domain/Entities/Hospital/hospital_entities.dart';
 
 abstract class HospitalProfileState extends Equatable {
   @override
@@ -11,7 +11,7 @@ class HospitalProfileInitial extends HospitalProfileState {}
 class HospitalProfileLoading extends HospitalProfileState {}
 
 class HospitalProfileLoaded extends HospitalProfileState {
-  final HospitalModel hospital;
+  final HospitalEntities hospital;
   HospitalProfileLoaded(this.hospital);
 
   @override

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:medisync360/utils/Services/api_service.dart';
 import 'analytics_event.dart';
 import 'analytics_state.dart';
@@ -43,7 +42,7 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
         emit(state.copyWith(
           isLoading: false,
           bedOccupancy: avgOccupancy.toDouble(),
-          departmentDistribution: departmentDistribution.map((key, value) => MapEntry(key, value as int)),
+          departmentDistribution: departmentDistribution.map((key, value) => MapEntry(key, value)),
           monthlyAdmissions: monthlyAdmissions,
           monthlyDischarges: monthlyDischarges,
         ));
